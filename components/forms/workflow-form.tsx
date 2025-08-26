@@ -457,6 +457,14 @@ export const WorkflowForm: React.FC<ConditionsFormProps> = ({
                                                 removeCondition={() =>
                                                     removeCondition(index)
                                                 }
+                                                onChange={function (
+                                                    values: FormValues
+                                                ): void {
+                                                    throw new Error(
+                                                        "Function not implemented."
+                                                    );
+                                                }}
+                                                error={undefined}
                                             />
                                         )
                                     )}

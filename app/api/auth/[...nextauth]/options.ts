@@ -1,8 +1,7 @@
-import type { NextAuthOptions, Account, User as NextAuthUser, Profile, Session as NextAuthSession } from 'next-auth';
-import type { JWT } from 'next-auth/jwt';
-import AzureADProvider from 'next-auth/providers/azure-ad';
-import jwt from 'jsonwebtoken';
-import { log } from 'console';
+import type { NextAuthOptions, User as NextAuthUser } from "next-auth";
+import AzureADProvider from "next-auth/providers/azure-ad";
+import jwt from "jsonwebtoken";
+import { log } from "console";
 
 interface User extends NextAuthUser {
   isAdmin?: boolean;
@@ -18,30 +17,32 @@ export const options: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account, profile, isNewUser }) {
-      console.log('jwt callback', { token, user }); // Log token and user
-      // Persist the access_token to the token right after sign in
+    async jwt({ token, account }) {
+      // Persist tokens after sign in
       if (account) {
         if (account.access_token) {
-          token.accessToken = account.access_token;
+          (token as any).accessToken = account.access_token;
         }
         if (account.id_token) {
-          log('account.id_token', account.id_token);
-          const decodedToken = jwt.decode(account.id_token) as any;
-          token.roles = decodedToken.roles; // Add roles to token
+          log("account.id_token", account.id_token);
+          const decoded: any = jwt.decode(account.id_token);
+          if (decoded?.roles) {
+            (token as any).roles = decoded.roles as string[];
+          }
         }
       }
-      return token; // Return the token
+      return token;
     },
-    async session({ session, token, user }) {
-      console.log('session callback', { session, token, user }); // Log session, token, and user
-      session.accessToken = token.accessToken;
-      if (session.user && Array.isArray(token.roles)) {
-        (session.user as User).roles = token.roles;
-        (session.user as User).isAdmin = token.roles.includes(process.env.AZURE_ADMIN_ROLE_ID as string);
+    async session({ session, token }) {
+      (session as any).accessToken = (token as any).accessToken;
+      if (session.user && Array.isArray((token as any).roles)) {
+        (session.user as User).roles = (token as any).roles;
+        (session.user as User).isAdmin = (token as any).roles.includes(
+          process.env.AZURE_ADMIN_ROLE_ID as string
+        );
       }
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET, // Ensure this matches your backend secret
+  secret: process.env.NEXTAUTH_SECRET,
 };

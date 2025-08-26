@@ -225,14 +225,10 @@ const CompanyPage = () => {
                                         setOpen(true);
                                         setSelected(course);
                                     }}>
-                                    Modifier
+                                    Edit
                                 </DropdownMenuItem>
-                                <DropdownMenuItem disabled>
-                                    <Link href={`/courses/${course.id}`}>
-                                        Voir les notes de frais
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
+                                {/* <DropdownMenuItem disabled></DropdownMenuItem>
+                                <DropdownMenuSeparator /> */}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -254,7 +250,7 @@ const CompanyPage = () => {
                 } as Company);
             }}
             className='h-8 mr-2'>
-            <PlusIcon className='mr-2 h-4 w-4' /> Ajouter
+            <PlusIcon className='mr-2 h-4 w-4' /> Add
         </Button>
     );
 

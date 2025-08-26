@@ -23,9 +23,10 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import Link from "next/link";
 import { User } from "next-auth";
+import { User as UserType } from "@/Types/types";
 import { Card } from "@/components/ui/card";
 import SidePanel from "@/components/ui/SidePanel";
-import ProfileForm from "./forms/profile-form";
+// import ProfileForm from "./forms/profile-form";
 import { set } from "date-fns";
 
 function classNames(...classes: string[]) {
@@ -416,13 +417,13 @@ const SideBar: React.FC<SideBarProps> = ({ children }) => {
                     </main>
                 </div>
             </div>
-            <SidePanel open={open} setOpen={setOpen}>
+            {/* <SidePanel open={open} setOpen={setOpen}>
                 <div className='flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl'>
                     <div className='h-0 flex-1 overflow-y-auto p-5'>
                         <ProfileForm userData={user} setOpen={setOpen} />
                     </div>
                 </div>
-            </SidePanel>
+            </SidePanel> */}
         </>
     );
 };

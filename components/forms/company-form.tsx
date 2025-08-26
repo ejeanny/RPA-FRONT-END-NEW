@@ -109,7 +109,10 @@ export const CompanyFormEdit: React.FC<CompanyFormEditProps> = ({
     async function onSubmit(formData: ProfileFormValues) {
         try {
             // If formData was accidentally shaped like { data: {...} }, unwrap it.
-            const payload: any = (formData as any)?.data ?? formData;
+            const payload: any = {
+                ...((formData as any)?.data ?? formData),
+                adminUpdate: true,
+            };
 
             let response;
             if (isNew) {
